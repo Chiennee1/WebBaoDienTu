@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    color: #111827;
+    background: #fff;
+    font-family: "Times New Roman", serif;
+    line-height: 1.6;
+}
+
+.print-shell {
+    width: min(780px, calc(100% - 40px));
+    margin: 28px auto;
+}
+
+.print-article h1 {
+    margin: 0 0 10px;
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+.muted {
+    color: #6b7280;
+}
+
+.article-summary {
+    font-weight: 700;
+}
+
+.article-body img {
+    max-width: 100%;
+}
+
+@media print {
+    .print-shell {
+        width: 100%;
+        margin: 0;
+    }
+}

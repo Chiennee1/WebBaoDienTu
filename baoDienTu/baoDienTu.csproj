@@ -99,13 +99,17 @@
     <Content Include="Admin\Default.aspx" />
     <Content Include="Admin\ManageCategory.aspx" />
     <Content Include="Admin\ManageComment.aspx" />
+    <Content Include="Admin\ManageNewsletter.aspx" />
     <Content Include="Admin\ManageNews.aspx" />
+    <Content Include="Admin\ManageSettings.aspx" />
     <Content Include="Admin\ManageUser.aspx" />
     <Content Include="Admin\PendingNews.aspx" />
+    <Content Include="Admin\SendNewsletter.aspx" />
+    <Content Include="Admin\Web.config" />
     <Content Include="About.aspx" />
     <Content Include="Contact.aspx" />
-    <Content Include="Content\Site.css" />
-    <Content Include="App_Data\Database.sql" />
+    <Content Include="Static\css\site.css" />
+    <Content Include="Database\BaoDienTu_Database.sql" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -114,6 +118,26 @@
     <Content Include="NewsDetail.aspx" />
     <Content Include="NewsList.aspx" />
     <Content Include="NewsletterSubscribe.aspx" />
+    <Content Include="NewsTag.aspx" />
+    <Content Include="Print.aspx" />
+    <Content Include="NewsletterConfirm.aspx" />
+    <Content Include="Unsubscribe.aspx" />
+    <Content Include="404.aspx" />
+    <Content Include="Error.aspx" />
+    <Content Include="Pages\Default.aspx" />
+    <Content Include="Pages\NewsList.aspx" />
+    <Content Include="Pages\NewsDetail.aspx" />
+    <Content Include="Pages\Search.aspx" />
+    <Content Include="Pages\Login.aspx" />
+    <Content Include="Pages\Register.aspx" />
+    <Content Include="Pages\NewsletterSubscribe.aspx" />
+    <Content Include="Pages\NewsTag.aspx" />
+    <Content Include="Pages\Print.aspx" />
+    <Content Include="Pages\PrintMasterPage.master" />
+    <Content Include="Pages\NewsletterConfirm.aspx" />
+    <Content Include="Pages\Unsubscribe.aspx" />
+    <Content Include="Pages\404.aspx" />
+    <Content Include="Pages\Error.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="Scripts\WebForms\DetailsView.js" />
     <Content Include="Scripts\WebForms\Focus.js" />
@@ -142,6 +166,17 @@
     <Content Include="Bundle.config" />
     <Content Include="Site.Mobile.Master" />
     <Content Include="Search.aspx" />
+    <Content Include="Handlers\IncreaseView.ashx" />
+    <Content Include="Handlers\ShareNews.ashx" />
+    <Content Include="Handlers\UploadImage.ashx" />
+    <Content Include="Editor\Web.config" />
+    <Content Include="Editor\MyNews.aspx" />
+    <Content Include="Editor\WriteNews.aspx" />
+    <Content Include="Editor\EditNews.aspx" />
+    <Content Include="User\Web.config" />
+    <Content Include="User\Profile.aspx" />
+    <Content Include="User\ChangePassword.aspx" />
+    <Content Include="Static\css\print.css" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Admin\AddEditNews.aspx.cs">
@@ -160,8 +195,16 @@
       <DependentUpon>ManageComment.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Admin\ManageNewsletter.aspx.cs">
+      <DependentUpon>ManageNewsletter.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Admin\ManageNews.aspx.cs">
       <DependentUpon>ManageNews.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\ManageSettings.aspx.cs">
+      <DependentUpon>ManageSettings.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Admin\ManageUser.aspx.cs">
@@ -170,6 +213,10 @@
     </Compile>
     <Compile Include="Admin\PendingNews.aspx.cs">
       <DependentUpon>PendingNews.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\SendNewsletter.aspx.cs">
+      <DependentUpon>SendNewsletter.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -188,22 +235,77 @@
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
-    <Compile Include="BLL\Services.cs" />
-    <Compile Include="DAL\DbHelper.cs" />
-    <Compile Include="DAL\Repositories.cs" />
-    <Compile Include="Default.aspx.cs">
+    <Compile Include="Code\BLL\CategoryBLL.cs" />
+    <Compile Include="Code\BLL\CommentBLL.cs" />
+    <Compile Include="Code\BLL\DashboardBLL.cs" />
+    <Compile Include="Code\BLL\EmailBLL.cs" />
+    <Compile Include="Code\BLL\NewsletterBLL.cs" />
+    <Compile Include="Code\BLL\NewsBLL.cs" />
+    <Compile Include="Code\BLL\ServiceAliases.cs" />
+    <Compile Include="Code\BLL\SettingBLL.cs" />
+    <Compile Include="Code\BLL\ShareLogBLL.cs" />
+    <Compile Include="Code\BLL\TagBLL.cs" />
+    <Compile Include="Code\BLL\UserBLL.cs" />
+    <Compile Include="Code\DAL\CategoryDAL.cs" />
+    <Compile Include="Code\DAL\CommentDAL.cs" />
+    <Compile Include="Code\DAL\DashboardDAL.cs" />
+    <Compile Include="Code\DAL\DBConnection.cs" />
+    <Compile Include="Code\DAL\NewsletterDAL.cs" />
+    <Compile Include="Code\DAL\NewsDAL.cs" />
+    <Compile Include="Code\DAL\SettingDAL.cs" />
+    <Compile Include="Code\DAL\ShareLogDAL.cs" />
+    <Compile Include="Code\DAL\TagDAL.cs" />
+    <Compile Include="Code\DAL\UserDAL.cs" />
+    <Compile Include="Code\Helpers\AdminUiHelper.cs" />
+    <Compile Include="Code\Helpers\AuthGuard.cs" />
+    <Compile Include="Code\Helpers\FileUploadHelper.cs" />
+    <Compile Include="Code\Helpers\PagingHelper.cs" />
+    <Compile Include="Code\Helpers\PublicPageWrapper.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Code\Helpers\SecurityHelper.cs" />
+    <Compile Include="Code\Helpers\SlugHelper.cs" />
+    <Compile Include="Code\Helpers\UiHelper.cs" />
+    <Compile Include="Code\Models\CategoryModel.cs" />
+    <Compile Include="Code\Models\CommentModel.cs" />
+    <Compile Include="Code\Models\DashboardModel.cs" />
+    <Compile Include="Code\Models\NewsletterModel.cs" />
+    <Compile Include="Code\Models\NewsModel.cs" />
+    <Compile Include="Code\Models\OperationResult.cs" />
+    <Compile Include="Code\Models\TagModel.cs" />
+    <Compile Include="Code\Models\UserModel.cs" />
+    <Compile Include="Pages\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Default.aspx.designer.cs">
+    <Compile Include="Pages\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\AdminUiHelper.cs" />
-    <Compile Include="Helpers\AppHelpers.cs" />
-    <Compile Include="Login.aspx.cs">
+    <Compile Include="Handlers\IncreaseView.ashx.cs">
+      <DependentUpon>IncreaseView.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Handlers\ShareNews.ashx.cs">
+      <DependentUpon>ShareNews.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Handlers\UploadImage.ashx.cs">
+      <DependentUpon>UploadImage.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\MyNews.aspx.cs">
+      <DependentUpon>MyNews.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Editor\WriteNews.aspx.cs">
+      <DependentUpon>WriteNews.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Editor\EditNews.aspx.cs">
+      <DependentUpon>EditNews.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -211,25 +313,52 @@
       <DependentUpon>Logout.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Models\Models.cs" />
-    <Compile Include="NewsDetail.aspx.cs">
+    <Compile Include="Pages\NewsDetail.aspx.cs">
       <DependentUpon>NewsDetail.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="NewsList.aspx.cs">
+    <Compile Include="Pages\NewsList.aspx.cs">
       <DependentUpon>NewsList.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="NewsletterSubscribe.aspx.cs">
+    <Compile Include="Pages\NewsletterSubscribe.aspx.cs">
       <DependentUpon>NewsletterSubscribe.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Pages\NewsTag.aspx.cs">
+      <DependentUpon>NewsTag.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Print.aspx.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PrintMasterPage.master.cs">
+      <DependentUpon>PrintMasterPage.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\NewsletterConfirm.aspx.cs">
+      <DependentUpon>NewsletterConfirm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Unsubscribe.aspx.cs">
+      <DependentUpon>Unsubscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\404.aspx.cs">
+      <DependentUpon>404.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Error.aspx.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Register.aspx.cs">
+    <Compile Include="Pages\Register.aspx.cs">
       <DependentUpon>Register.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Search.aspx.cs">
+    <Compile Include="Pages\Search.aspx.cs">
       <DependentUpon>Search.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -240,14 +369,24 @@
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
+    <Compile Include="User\Profile.aspx.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="User\ChangePassword.aspx.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Site.Mobile.Master.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
