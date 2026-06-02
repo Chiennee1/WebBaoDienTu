@@ -1,0 +1,48 @@
+# Visual Studio / ASP.NET Web Forms
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+TestResults/
+publish/
+PublishProfiles/*.pubxml.user
+
+# NuGet packages are restored from packages.config
+packages/
+!**/packages.config
+*.nupkg
+
+# Package-generated frontend vendor assets
+# Bootstrap/JQuery are loaded from CDN in Site.Master.
+baoDienTu/Content/bootstrap*.css
+baoDienTu/Content/bootstrap*.css.map
+baoDienTu/Scripts/bootstrap*.js
+baoDienTu/Scripts/bootstrap*.js.map
+baoDienTu/Scripts/jquery-*.js
+baoDienTu/Scripts/jquery-*.map
+baoDienTu/Scripts/jquery-*.intellisense.js
+baoDienTu/Scripts/modernizr-*.js
+
+# Logs and temporary files
+*.log
+*.tmp
+*.cache
+*.bak
+*.orig
+~*
+
+# Local SQL Server files
+*.mdf
+*.ldf
+App_Data/*.mdf
+App_Data/*.ldf

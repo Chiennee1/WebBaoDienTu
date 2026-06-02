@@ -171,12 +171,39 @@ namespace baoDienTu.Helpers
             return clean.Length <= length ? clean : clean.Substring(0, length).Trim() + "...";
         }
 
+        public static string ResolveImageUrl(string imagePath)
+        {
+            if (string.IsNullOrWhiteSpace(imagePath))
+            {
+                return string.Empty;
+            }
+
+            if (Uri.TryCreate(imagePath, UriKind.Absolute, out var uri) &&
+                (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+            {
+                return imagePath;
+            }
+
+            if (imagePath.StartsWith("~/", StringComparison.Ordinal))
+            {
+                return VirtualPathUtility.ToAbsolute(imagePath);
+            }
+
+            if (imagePath.StartsWith("/", StringComparison.Ordinal))
+            {
+                return imagePath;
+            }
+
+            return VirtualPathUtility.ToAbsolute("~/" + imagePath.TrimStart('/'));
+        }
+
         public static string ImageBlock(NewsModel news, string className)
         {
             var label = string.IsNullOrWhiteSpace(news.CatName) ? "Tin mới" : news.CatName;
-            var img = string.IsNullOrWhiteSpace(news.Thumbnail)
+            var imageUrl = ResolveImageUrl(news.Thumbnail);
+            var img = string.IsNullOrWhiteSpace(imageUrl)
                 ? string.Empty
-                : "<img src=\"" + Attr(VirtualPathUtility.ToAbsolute(news.Thumbnail)) + "\" alt=\"" + Attr(news.Title) + "\" onerror=\"this.remove();this.parentElement.classList.add('is-placeholder');\" />";
+                : "<img src=\"" + Attr(imageUrl) + "\" alt=\"" + Attr(news.Title) + "\" onerror=\"this.remove();this.parentElement.classList.add('is-placeholder');\" />";
             return "<div class=\"news-image " + Attr(className) + "\" data-label=\"" + Attr(label) + "\">" + img + "</div>";
         }
 

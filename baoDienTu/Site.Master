@@ -1,27 +1,20 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="baoDienTu.SiteMaster" %>
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="baoDienTu.SiteMaster" %>
 
 <!DOCTYPE html>
-
-<html lang="en">
+<html lang="vi">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%: Page.Title %> - My ASP.NET Application</title>
-
-    <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/bundles/modernizr") %>
-    </asp:PlaceHolder>
-
+    <title><%: Page.Title %> - Báo Điện Tử</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
     <webopt:bundlereference runat="server" path="~/Content/css" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
 </head>
 <body>
     <form runat="server">
-        <asp:ScriptManager runat="server">
+        <asp:ScriptManager runat="server" EnableCdn="true">
             <Scripts>
-                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
-                <%--Framework Scripts--%>
                 <asp:ScriptReference Name="MsAjaxBundle" />
                 <asp:ScriptReference Name="jquery" />
                 <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
@@ -33,37 +26,79 @@
                 <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
                 <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
                 <asp:ScriptReference Name="WebFormsBundle" />
-                <%--Site Scripts--%>
             </Scripts>
         </asp:ScriptManager>
 
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" runat="server" href="~/">Application name</a>
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/About">About</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Contact</a></li>
-                    </ul>
+        <header class="site-header">
+            <div class="topbar">
+                <div class="container-xl topbar-inner">
+                    <span>Cập nhật tin tức 24/7</span>
+                    <div class="topbar-links"><%= RenderAuthLinks() %></div>
                 </div>
             </div>
-        </nav>
-        <div class="container body-content">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
-            <hr />
-            <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
-            </footer>
-        </div>
+            <div class="brand-row">
+                <div class="container-xl brand-inner">
+                    <a class="brand-mark" runat="server" href="~/">
+                        <span class="brand-symbol">BĐT</span>
+                        <span>
+                            <strong>Báo Điện Tử</strong>
+                            <small>Nhanh, rõ, đáng tin</small>
+                        </span>
+                    </a>
+                    <div class="global-search">
+                        <input type="search" id="globalSearch" aria-label="Tìm kiếm" placeholder="Tìm kiếm tin tức..." />
+                        <button type="button" onclick="goSearch()">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+            <nav class="category-nav" aria-label="Chuyên mục">
+                <div class="container-xl category-scroll">
+                    <a runat="server" href="~/">Trang chủ</a>
+                    <%= RenderCategoryLinks() %>
+                </div>
+            </nav>
+        </header>
+
+        <main class="site-main">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </main>
+
+        <footer class="site-footer">
+            <div class="container-xl footer-grid">
+                <div>
+                    <h2>Báo Điện Tử</h2>
+                    <p>MVP tin tức xây dựng bằng ASP.NET Web Forms, ADO.NET và SQL Server.</p>
+                </div>
+                <div>
+                    <h3>Chức năng</h3>
+                    <a runat="server" href="~/Search.aspx">Tìm kiếm</a>
+                    <a runat="server" href="~/NewsletterSubscribe.aspx">Newsletter</a>
+                    <a runat="server" href="~/Contact.aspx">Liên hệ</a>
+                </div>
+                <div>
+                    <h3>Quản trị</h3>
+                    <a runat="server" href="~/Login.aspx">Đăng nhập</a>
+                    <a runat="server" href="~/Admin/Default.aspx">Bảng điều khiển</a>
+                </div>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            function goSearch() {
+                var input = document.getElementById('globalSearch');
+                var q = input ? input.value.trim() : '';
+                if (q.length > 0) {
+                    window.location.href = '<%= ResolveUrl("~/Search.aspx") %>?q=' + encodeURIComponent(q);
+                }
+            }
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' && event.target && event.target.id === 'globalSearch') {
+                    event.preventDefault();
+                    goSearch();
+                }
+            });
+        </script>
     </form>
-    <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
-    </asp:PlaceHolder>
 </body>
 </html>

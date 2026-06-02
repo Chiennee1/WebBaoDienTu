@@ -31,10 +31,6 @@ namespace baoDienTu
                     "~/Scripts/WebForms/MsAjax/MicrosoftAjaxTimer.js",
                     "~/Scripts/WebForms/MsAjax/MicrosoftAjaxWebForms.js"));
 
-            // Use the Development version of Modernizr to develop with and learn from. Then, when you’re
-            // ready for production, use the build tool at https://modernizr.com to pick only the tests you need
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                            "~/Scripts/modernizr-*"));
         }
 
         public static void RegisterJQueryScriptManager()
@@ -42,10 +38,10 @@ namespace baoDienTu
             ScriptManager.ScriptResourceMapping.AddDefinition("jquery",
                 new ScriptResourceDefinition
                 {
-                    Path = "~/scripts/jquery-3.7.0.min.js",
-                    DebugPath = "~/scripts/jquery-3.7.0.js",
-                    CdnPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.7.0.min.js",
-                    CdnDebugPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.7.0.js"
+                    Path = "~/scripts/jquery-3.7.1.min.js",
+                    DebugPath = "~/scripts/jquery-3.7.1.js",
+                    CdnPath = "https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.7.1.min.js",
+                    CdnDebugPath = "https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.7.1.js"
                 });
         }
     }
