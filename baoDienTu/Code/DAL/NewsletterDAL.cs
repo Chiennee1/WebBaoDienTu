@@ -21,6 +21,15 @@ namespace baoDienTu.DAL
             return result.Value == DBNull.Value ? 0 : Convert.ToInt32(result.Value);
         }
 
+        public static NewsletterModel GetByEmail(string email)
+        {
+            var table = DBConnection.ExecuteDataTable(
+                "SELECT TOP 1 * FROM Newsletter WHERE Email = @Email",
+                CommandType.Text,
+                DBConnection.Param("@Email", email));
+            return table.Rows.Count == 0 ? null : MapNewsletter(table.Rows[0]);
+        }
+
         public static int Confirm(string token)
         {
             var result = DBConnection.OutputParam("@Result", SqlDbType.Int);

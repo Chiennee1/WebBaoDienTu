@@ -11,6 +11,11 @@ namespace baoDienTu.Pages
     {
         private const int PageSize = 9;
 
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            UiHelper.DisableBrowserCache();
+        }
+
         protected string RenderPage()
         {
             var tagSlug = Request.QueryString["tag"];

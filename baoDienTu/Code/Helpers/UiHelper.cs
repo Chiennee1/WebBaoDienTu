@@ -19,6 +19,21 @@ namespace baoDienTu.Helpers
             return HttpUtility.HtmlAttributeEncode(value == null ? string.Empty : Convert.ToString(value));
         }
 
+        public static void DisableBrowserCache()
+        {
+            var response = HttpContext.Current == null ? null : HttpContext.Current.Response;
+            if (response == null)
+            {
+                return;
+            }
+
+            response.Cache.SetCacheability(HttpCacheability.NoCache);
+            response.Cache.SetNoStore();
+            response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
+            response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+            response.Cache.SetValidUntilExpires(false);
+        }
+
         public static string NewsUrl(string slug)
         {
             return VirtualPathUtility.ToAbsolute("~/NewsDetail.aspx?slug=" + HttpUtility.UrlEncode(slug ?? string.Empty));

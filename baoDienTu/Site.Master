@@ -32,22 +32,28 @@
         <header class="site-header">
             <div class="topbar">
                 <div class="container-xl topbar-inner">
-                    <span>Cập nhật tin tức 24/7</span>
+                    <div class="topbar-left">
+                        <span class="newsroom-pill">Tin mới 24/7</span>
+                        <span><%= RenderCurrentDate() %></span>
+                    </div>
                     <div class="topbar-links"><%= RenderAuthLinks() %></div>
                 </div>
             </div>
             <div class="brand-row">
                 <div class="container-xl brand-inner">
                     <a class="brand-mark" runat="server" href="~/">
-                        <span class="brand-symbol">BĐT</span>
-                        <span>
+                        <span class="brand-symbol" aria-hidden="true"><span>BĐT</span></span>
+                        <span class="brand-copy">
                             <strong>Báo Điện Tử</strong>
                             <small>Nhanh, rõ, đáng tin</small>
                         </span>
                     </a>
-                    <div class="global-search">
-                        <input type="search" id="globalSearch" aria-label="Tìm kiếm" placeholder="Tìm kiếm tin tức..." />
-                        <button type="button" onclick="goSearch()">Tìm kiếm</button>
+                    <div class="header-tools">
+                        <a class="quick-link" runat="server" href="~/NewsletterSubscribe.aspx">Newsletter</a>
+                        <div class="global-search">
+                            <input type="search" id="globalSearch" aria-label="Tìm kiếm" placeholder="Tìm kiếm tin tức..." />
+                            <button type="button" onclick="goSearch()">Tìm</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -65,20 +71,33 @@
 
         <footer class="site-footer">
             <div class="container-xl footer-grid">
-                <div>
-                    <h2>Báo Điện Tử</h2>
-                    <p>MVP tin tức xây dựng bằng ASP.NET Web Forms, ADO.NET và SQL Server.</p>
+                <div class="footer-brand">
+                    <a class="brand-mark footer-logo" runat="server" href="~/">
+                        <span class="brand-symbol" aria-hidden="true"><span>BĐT</span></span>
+                        <span class="brand-copy">
+                            <strong>Báo Điện Tử</strong>
+                            <small>Nhanh, rõ, đáng tin</small>
+                        </span>
+                    </a>
+                    <p>Hệ thống báo điện tử xây dựng bằng ASP.NET Web Forms, ADO.NET và SQL Server theo mô hình 3 lớp.</p>
                 </div>
                 <div>
-                    <h3>Chức năng</h3>
+                    <h3>Độc giả</h3>
+                    <a runat="server" href="~/NewsList.aspx">Tin mới nhất</a>
                     <a runat="server" href="~/Search.aspx">Tìm kiếm</a>
                     <a runat="server" href="~/NewsletterSubscribe.aspx">Newsletter</a>
-                    <a runat="server" href="~/Contact.aspx">Liên hệ</a>
                 </div>
                 <div>
-                    <h3>Quản trị</h3>
+                    <h3>Tài khoản</h3>
                     <a runat="server" href="~/Login.aspx">Đăng nhập</a>
+                    <a runat="server" href="~/Register.aspx">Đăng ký độc giả</a>
                     <a runat="server" href="~/Admin/Default.aspx">Bảng điều khiển</a>
+                </div>
+                <div>
+                    <h3>Thông tin</h3>
+                    <a runat="server" href="~/About.aspx">Giới thiệu</a>
+                    <a runat="server" href="~/Contact.aspx">Liên hệ</a>
+                    <span>© <%= RenderFooterYear() %> Báo Điện Tử</span>
                 </div>
             </div>
         </footer>

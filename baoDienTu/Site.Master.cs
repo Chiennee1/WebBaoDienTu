@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Text;
 using System.Web.UI;
 using baoDienTu.BLL;
@@ -10,6 +11,17 @@ namespace baoDienTu
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+        }
+
+        protected string RenderCurrentDate()
+        {
+            var culture = CultureInfo.GetCultureInfo("vi-VN");
+            return UiHelper.E(DateTime.Now.ToString("dddd, dd/MM/yyyy", culture));
+        }
+
+        protected string RenderFooterYear()
+        {
+            return DateTime.Now.Year.ToString(CultureInfo.InvariantCulture);
         }
 
         protected string RenderCategoryLinks()

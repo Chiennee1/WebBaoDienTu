@@ -11,6 +11,7 @@ namespace baoDienTu.Pages
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            UiHelper.DisableBrowserCache();
         }
 
         protected string RenderPage()

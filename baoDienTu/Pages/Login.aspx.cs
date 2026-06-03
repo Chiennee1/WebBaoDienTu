@@ -26,7 +26,7 @@ namespace baoDienTu.Pages
                 {
                     AuthGuard.SignIn(user);
                     var returnUrl = Request.QueryString["returnUrl"];
-                    Response.Redirect(string.IsNullOrWhiteSpace(returnUrl) ? "~/Admin/Default.aspx" : returnUrl);
+                    Response.Redirect(SafeReturnUrl(returnUrl));
                 }
             }
         }
@@ -41,6 +41,29 @@ namespace baoDienTu.Pages
                    "<div class=\"btn-row\" style=\"margin-top:18px\"><button class=\"btn-main\" type=\"submit\">Đăng nhập</button><a class=\"btn-soft\" href=\"" + ResolveUrl("~/Register.aspx") + "\">Tạo tài khoản</a></div>" +
                    "<p class=\"muted\" style=\"margin-top:16px\">Tài khoản mẫu: admin/Admin@123, editor01/Editor@123, reader01/Reader@123.</p>" +
                    "</div></div></div>";
+        }
+
+        private string SafeReturnUrl(string returnUrl)
+        {
+            if (string.IsNullOrWhiteSpace(returnUrl))
+            {
+                return ResolveUrl("~/Admin/Default.aspx");
+            }
+
+            returnUrl = HttpUtility.UrlDecode(returnUrl).Trim();
+            if (returnUrl.StartsWith("~/", StringComparison.Ordinal))
+            {
+                return ResolveUrl(returnUrl);
+            }
+
+            if (returnUrl.StartsWith("/", StringComparison.Ordinal) &&
+                !returnUrl.StartsWith("//", StringComparison.Ordinal) &&
+                returnUrl.IndexOf("://", StringComparison.Ordinal) < 0)
+            {
+                return returnUrl;
+            }
+
+            return ResolveUrl("~/Admin/Default.aspx");
         }
     }
 }

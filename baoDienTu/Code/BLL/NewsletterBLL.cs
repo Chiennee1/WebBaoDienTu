@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System;
+using System.Net.Mail;
 using System.Text;
 using baoDienTu.DAL;
 using baoDienTu.Helpers;
@@ -10,6 +12,22 @@ namespace baoDienTu.BLL
     {
         public static OperationResult Subscribe(string email, string fullName)
         {
+            email = string.IsNullOrWhiteSpace(email) ? string.Empty : email.Trim();
+            fullName = string.IsNullOrWhiteSpace(fullName) ? string.Empty : fullName.Trim();
+
+            if (!IsValidEmail(email))
+            {
+                return OperationResult.Fail("Vui lòng nhập email hợp lệ.");
+            }
+
+            var existing = NewsletterDAL.GetByEmail(email);
+            if (existing != null && existing.IsConfirmed)
+            {
+                return OperationResult.Ok(existing.IsActive
+                    ? "Email này đã xác nhận đăng ký newsletter."
+                    : "Email này đã hủy newsletter trước đó. Vui lòng liên hệ quản trị viên để kích hoạt lại.");
+            }
+
             var token = SecurityHelper.GenerateToken();
             var unsubToken = SecurityHelper.GenerateToken();
             var code = NewsletterDAL.Subscribe(email, fullName, token, unsubToken);
@@ -61,6 +79,19 @@ namespace baoDienTu.BLL
 
             NewsletterDAL.AddSendHistory(subject, htmlContent, sentBy, sent);
             return OperationResult.Ok("Đã gửi bản tin đến " + sent + "/" + subscribers.Count + " subscriber.");
+        }
+
+        private static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var address = new MailAddress(email);
+                return string.Equals(address.Address, email, StringComparison.OrdinalIgnoreCase);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
