@@ -2,7 +2,7 @@ using System;
 using System.Web.UI;
 using baoDienTu.Helpers;
 
-namespace baoDienTu
+namespace baoDienTu.Pages
 {
     public partial class Logout : Page
     {

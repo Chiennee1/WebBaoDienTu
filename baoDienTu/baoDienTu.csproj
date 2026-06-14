@@ -106,24 +106,10 @@
     <Content Include="Admin\PendingNews.aspx" />
     <Content Include="Admin\SendNewsletter.aspx" />
     <Content Include="Admin\Web.config" />
-    <Content Include="About.aspx" />
-    <Content Include="Contact.aspx" />
     <Content Include="Static\css\site.css" />
     <Content Include="Database\BaoDienTu_Database.sql" />
-    <Content Include="Default.aspx" />
-    <Content Include="favicon.ico" />
+    <Content Include="Static\images\favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Login.aspx" />
-    <Content Include="Logout.aspx" />
-    <Content Include="NewsDetail.aspx" />
-    <Content Include="NewsList.aspx" />
-    <Content Include="NewsletterSubscribe.aspx" />
-    <Content Include="NewsTag.aspx" />
-    <Content Include="Print.aspx" />
-    <Content Include="NewsletterConfirm.aspx" />
-    <Content Include="Unsubscribe.aspx" />
-    <Content Include="404.aspx" />
-    <Content Include="Error.aspx" />
     <Content Include="Pages\Default.aspx" />
     <Content Include="Pages\NewsList.aspx" />
     <Content Include="Pages\NewsDetail.aspx" />
@@ -133,12 +119,17 @@
     <Content Include="Pages\NewsletterSubscribe.aspx" />
     <Content Include="Pages\NewsTag.aspx" />
     <Content Include="Pages\Print.aspx" />
-    <Content Include="Pages\PrintMasterPage.master" />
     <Content Include="Pages\NewsletterConfirm.aspx" />
     <Content Include="Pages\Unsubscribe.aspx" />
     <Content Include="Pages\404.aspx" />
     <Content Include="Pages\Error.aspx" />
-    <Content Include="Register.aspx" />
+    <Content Include="Pages\About.aspx" />
+    <Content Include="Pages\Contact.aspx" />
+    <Content Include="Pages\Logout.aspx" />
+    <Content Include="MasterPages\Site.Master" />
+    <Content Include="MasterPages\Site.Mobile.Master" />
+    <Content Include="MasterPages\PrintMasterPage.master" />
+    <Content Include="Controls\ViewSwitcher.ascx" />
     <Content Include="Scripts\WebForms\DetailsView.js" />
     <Content Include="Scripts\WebForms\Focus.js" />
     <Content Include="Scripts\WebForms\GridView.js" />
@@ -160,12 +151,7 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
-    <Content Include="Site.Master" />
-    <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
-    <Content Include="Bundle.config" />
-    <Content Include="Site.Mobile.Master" />
-    <Content Include="Search.aspx" />
     <Content Include="Handlers\IncreaseView.ashx" />
     <Content Include="Handlers\ShareNews.ashx" />
     <Content Include="Handlers\UploadImage.ashx" />
@@ -220,19 +206,19 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="About.aspx.cs">
+    <Compile Include="Pages\About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="About.aspx.designer.cs">
+    <Compile Include="Pages\About.aspx.designer.cs">
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Contact.aspx.cs">
+    <Compile Include="Pages\Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Contact.aspx.designer.cs">
+    <Compile Include="Pages\Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="Code\BLL\CategoryBLL.cs" />
@@ -260,9 +246,6 @@
     <Compile Include="Code\Helpers\AuthGuard.cs" />
     <Compile Include="Code\Helpers\FileUploadHelper.cs" />
     <Compile Include="Code\Helpers\PagingHelper.cs" />
-    <Compile Include="Code\Helpers\PublicPageWrapper.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="Code\Helpers\SecurityHelper.cs" />
     <Compile Include="Code\Helpers\SlugHelper.cs" />
     <Compile Include="Code\Helpers\UiHelper.cs" />
@@ -309,7 +292,7 @@
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Logout.aspx.cs">
+    <Compile Include="Pages\Logout.aspx.cs">
       <DependentUpon>Logout.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -333,7 +316,7 @@
       <DependentUpon>Print.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\PrintMasterPage.master.cs">
+    <Compile Include="MasterPages\PrintMasterPage.master.cs">
       <DependentUpon>PrintMasterPage.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -362,11 +345,11 @@
       <DependentUpon>Search.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Site.Master.cs">
+    <Compile Include="MasterPages\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Site.Master.designer.cs">
+    <Compile Include="MasterPages\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
     <Compile Include="User\Profile.aspx.cs">
@@ -377,23 +360,24 @@
       <DependentUpon>ChangePassword.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Site.Mobile.Master.cs">
+    <Compile Include="MasterPages\Site.Mobile.Master.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Site.Mobile.Master.designer.cs">
+    <Compile Include="MasterPages\Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
-    <Compile Include="ViewSwitcher.ascx.cs">
+    <Compile Include="Controls\ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ViewSwitcher.ascx.designer.cs">
+    <Compile Include="Controls\ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Docs\BaoDienTu_ProjectStructure.md" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

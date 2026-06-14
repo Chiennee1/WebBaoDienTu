@@ -1,6 +1,6 @@
 using System.Web.UI;
 
-namespace baoDienTu.Pages
+namespace baoDienTu.MasterPages
 {
     public partial class PrintMasterPage : MasterPage
     {

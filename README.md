@@ -61,17 +61,20 @@ baoDienTu/
   Editor/                Trang bien tap vien
   User/                  Ho so va doi mat khau
   Pages/                 Trang public thuc te
+  MasterPages/           Layout dung chung va layout trang in
+  Controls/              User controls dung chung
   Code/BLL/              Xu ly nghiep vu
   Code/DAL/              Truy cap database
   Code/Helpers/          Helper UI, auth, upload, paging, security
   Code/Models/           DTO/model
   Database/              Script tao va seed database
+  Docs/                  Tai lieu phan tich/thiet ke
   Handlers/              AJAX/upload/share/view handlers
   Static/css/            CSS giao dien
-  Site.Master            Header, navigation, footer
+  Static/images/         Favicon va anh tinh
 ```
 
-Luu y: cac file public o root nhu `Default.aspx`, `NewsDetail.aspx`, `Login.aspx` la wrapper. Runtime se `Server.Transfer` sang file tuong ung trong `Pages/`.
+Luu y: URL public nhu `Default.aspx`, `NewsDetail.aspx`, `Login.aspx` duoc map trong `App_Start/RouteConfig.cs` sang file tuong ung trong `Pages/`. Root project chi giu cac file bat buoc cua Web Forms/IIS nhu `Web.config`, `Global.asax`, `.csproj`, `.sln`.
 
 ## Cai dat va chay du an
 

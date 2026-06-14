@@ -1,4 +1,4 @@
-<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="PrintMasterPage.master.cs" Inherits="baoDienTu.Pages.PrintMasterPage" %>
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="PrintMasterPage.master.cs" Inherits="baoDienTu.MasterPages.PrintMasterPage" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head runat="server">

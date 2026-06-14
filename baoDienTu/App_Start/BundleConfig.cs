@@ -14,6 +14,9 @@ namespace baoDienTu
         {
             RegisterJQueryScriptManager();
 
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                            "~/Static/css/site.css"));
+
             bundles.Add(new ScriptBundle("~/bundles/WebFormsJs").Include(
                             "~/Scripts/WebForms/WebForms.js",
                             "~/Scripts/WebForms/WebUIValidation.js",

@@ -5,7 +5,7 @@ using System.Web.UI;
 using baoDienTu.BLL;
 using baoDienTu.Helpers;
 
-namespace baoDienTu
+namespace baoDienTu.MasterPages
 {
     public partial class SiteMaster : MasterPage
     {

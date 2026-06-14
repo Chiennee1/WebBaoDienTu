@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace baoDienTu
+namespace baoDienTu.MasterPages
 {
     public partial class Site_Mobile : System.Web.UI.MasterPage
     {

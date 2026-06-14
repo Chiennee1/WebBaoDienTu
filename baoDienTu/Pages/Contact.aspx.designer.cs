@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace baoDienTu
+namespace baoDienTu.Pages
 {
 
 
