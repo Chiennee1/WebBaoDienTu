@@ -35,15 +35,16 @@ namespace baoDienTu.DAL
             total = Convert.ToInt32(DBConnection.ExecuteScalar(
                 "SELECT COUNT(1) FROM vw_CommentDetails " + where,
                 CommandType.Text,
-                DBConnection.Param("@Approved", approved)));
+                DBConnection.Param("@Approved", approved.HasValue ? (object)approved.Value : DBNull.Value)));
             var table = DBConnection.ExecuteDataTable(
                 "SELECT * FROM vw_CommentDetails " + where + " ORDER BY CreatedAt DESC OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY",
                 CommandType.Text,
-                DBConnection.Param("@Approved", approved),
+                DBConnection.Param("@Approved", approved.HasValue ? (object)approved.Value : DBNull.Value),
                 DBConnection.Param("@Offset", (page - 1) * pageSize),
                 DBConnection.Param("@PageSize", pageSize));
             return table.Rows.Cast<DataRow>().Select(MapComment).ToList();
         }
+
 
         public static void Approve(int commentId, bool approved)
         {

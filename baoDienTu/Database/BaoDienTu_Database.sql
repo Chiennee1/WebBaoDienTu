@@ -1,4 +1,4 @@
-﻿
+
 CREATE DATABASE BaoDienTuDB
     COLLATE Vietnamese_CI_AS;  -- Hỗ trợ tiếng Việt
 GO
@@ -262,7 +262,10 @@ SELECT
     u.Avatar      AS AuthorAvatar,
     u.Email       AS AuthorEmail,
     n.ApprovedBy,
-    ap.FullName   AS ApprovedByName
+    ap.FullName   AS ApprovedByName,
+    n.Status,
+    n.IsApproved,
+    n.RejectReason
 FROM News n
 INNER JOIN Categories c  ON n.CatID     = c.CatID
 LEFT  JOIN Categories pc ON c.ParentID  = pc.CatID

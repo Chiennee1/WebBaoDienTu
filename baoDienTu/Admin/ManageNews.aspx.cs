@@ -43,7 +43,12 @@ namespace baoDienTu.Admin
                         builder.Append("<button class=\"btn-soft\" name=\"approve\" value=\"" + item.NewsID + "\" type=\"submit\">Duyệt</button> ");
                         builder.Append("<button class=\"btn-danger\" name=\"reject\" value=\"" + item.NewsID + "\" type=\"submit\">Từ chối</button> ");
                     }
-                    builder.Append("<button class=\"btn-danger\" name=\"delete\" value=\"" + item.NewsID + "\" type=\"submit\" onclick=\"return confirm('Xóa bài viết này?')\">Xóa</button>");
+                    // Tác giả chỉ được xóa bài của mình; Admin xóa được tất cả
+                    if (AuthGuard.IsAdmin || item.AuthorID == AuthGuard.CurrentUserId)
+                    {
+                        builder.Append("<button class=\"btn-danger\" name=\"delete\" value=\"" + item.NewsID + "\" type=\"submit\" onclick=\"return confirm('Xóa bài viết này?')\">Xóa</button>");
+                    }
+
                     builder.Append("</td></tr>");
                 }
                 builder.Append("</tbody></table></div>");

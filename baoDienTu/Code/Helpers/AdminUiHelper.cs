@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Web;
 
@@ -36,12 +37,20 @@ namespace baoDienTu.Helpers
 
         private static void AppendNav(StringBuilder builder, string path, string label)
         {
+            var absPath = Url(path);
+            var currentPath = HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath ?? string.Empty;
+            // So sánh không phân biệt hoa thường, bỏ query string
+            var isActive = string.Equals(
+                VirtualPathUtility.ToAbsolute(currentPath.Split('?')[0]),
+                absPath.Split('?')[0],
+                StringComparison.OrdinalIgnoreCase);
             builder.Append("<a href=\"");
-            builder.Append(UiHelper.Attr(Url(path)));
-            builder.Append("\">");
+            builder.Append(UiHelper.Attr(absPath));
+            builder.Append("\"" + (isActive ? " class=\"admin-nav-active\"" : string.Empty) + ">");
             builder.Append(UiHelper.E(label));
             builder.Append("</a>");
         }
+
 
         private static string Url(string path)
         {

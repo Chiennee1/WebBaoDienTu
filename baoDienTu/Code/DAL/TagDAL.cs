@@ -9,10 +9,21 @@ namespace baoDienTu.DAL
     {
         public static void AddTagsToNews(int newsId, string tagNames)
         {
+            // Xóa tags cũ trước khi thêm mới để tránh trùng lặp
+            DBConnection.ExecuteNonQuery("DELETE FROM News_Tags WHERE NewsID = @NewsID",
+                CommandType.Text,
+                DBConnection.Param("@NewsID", newsId));
+
+            if (string.IsNullOrWhiteSpace(tagNames))
+            {
+                return;
+            }
+
             DBConnection.ExecuteNonQuery("sp_AddTagsToNews", CommandType.StoredProcedure,
                 DBConnection.Param("@NewsID", newsId),
-                DBConnection.Param("@TagNames", tagNames ?? string.Empty));
+                DBConnection.Param("@TagNames", tagNames));
         }
+
 
         public static List<TagModel> GetTagsByNews(int newsId)
         {

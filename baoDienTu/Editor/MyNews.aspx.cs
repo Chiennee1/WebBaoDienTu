@@ -21,7 +21,8 @@ namespace baoDienTu.Editor
             builder.Append("<div class=\"table-wrap\"><table class=\"data-table\"><thead><tr><th>Tiêu đề</th><th>Chuyên mục</th><th>Trạng thái</th><th>Lượt xem</th><th>Thao tác</th></tr></thead><tbody>");
             foreach (var item in items)
             {
-                builder.Append("<tr><td><strong>" + UiHelper.E(item.Title) + "</strong><br/><span class=\"muted\">" + UiHelper.E(item.Slug) + "</span></td><td>" + UiHelper.E(item.CatName) + "</td><td>" + UiHelper.StatusBadge(item.Status) + "</td><td>" + item.ViewCount + "</td><td><a class=\"btn-soft\" href=\"EditNews.aspx?id=" + item.NewsID + "\">Sửa</a></td></tr>");
+                builder.Append("<tr><td><strong>" + UiHelper.E(item.Title) + "</strong><br/><span class=\"muted\">" + UiHelper.E(item.Slug) + "</span></td><td>" + UiHelper.E(item.CatName) + "</td><td>" + UiHelper.StatusBadge(item.Status) + (item.Status == 3 && !string.IsNullOrWhiteSpace(item.RejectReason) ? "<br/><span style=\"color:#b45309;font-size:0.85rem;display:block;margin-top:4px\">📋 " + UiHelper.E(item.RejectReason) + "</span>" : string.Empty) + "</td><td>" + item.ViewCount + "</td><td><a class=\"btn-soft\" href=\"EditNews.aspx?id=" + item.NewsID + "\">Sửa</a></td></tr>");
+
             }
             builder.Append("</tbody></table></div>");
             return AdminUiHelper.Layout("Bài viết của tôi", builder.ToString());

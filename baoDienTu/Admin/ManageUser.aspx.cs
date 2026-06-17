@@ -21,8 +21,17 @@ namespace baoDienTu.Admin
                 try
                 {
                     var userId = Convert.ToInt32(Request.Form["toggleUser"]);
-                    int total;
-                    var user = UserService.GetUsers(1, 1000, null, out total).Find(u => u.UserID == userId);
+                    // Chỉ lấy 1 user thay vì load 1000 records
+                    int dummy;
+                    var found = UserService.GetUsers(1, 1, userId.ToString(), out dummy);
+                    var user = found.Count > 0 && found[0].UserID == userId ? found[0] : null;
+                    if (user == null)
+                    {
+                        // Fallback: dùng search rộng hơn
+                        var all = UserService.GetUsers(1, 1000, null, out dummy);
+                        user = all.Find(u => u.UserID == userId);
+                    }
+
                     if (user != null && user.UserID != AuthGuard.CurrentUserId)
                     {
                         UserService.SetActive(user.UserID, !user.IsActive);
@@ -34,6 +43,7 @@ namespace baoDienTu.Admin
                     _result = OperationResult.Fail(ex.Message);
                 }
             }
+
         }
 
         protected string RenderPage()

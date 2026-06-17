@@ -151,34 +151,117 @@ namespace baoDienTu.Pages
             _commentResult = CommentService.Add(news.NewsID, userId, guestName, guestEmail, content);
             if (_commentResult.Success)
             {
+                var displayName = AuthGuard.IsAuthenticated ? AuthGuard.CurrentFullName : guestName;
+                Session["PendingComment_" + news.NewsID] = displayName + "|||" + content + "|||" + DateTime.Now.ToString("o");
                 Response.Redirect(UiHelper.NewsUrl(news.Slug) + "&comment=sent#comments", true);
             }
         }
 
         private string RenderComments(NewsModel news, System.Collections.Generic.List<CommentModel> comments)
         {
-            var builder = new StringBuilder("<section id=\"comments\" style=\"margin-top:30px\"><div class=\"section-title\"><h2>Bình luận</h2></div>");
-            builder.Append(UiHelper.Alert(_commentResult));
-            if (comments.Count == 0)
+            var builder = new StringBuilder("<section id=\"comments\" style=\"margin-top:30px\"><div class=\"section-title\"><h2>Bình luận (" + comments.Count + ")</h2></div>");
+
+            if (_commentResult != null && !string.IsNullOrWhiteSpace(_commentResult.Message))
             {
-                builder.Append("<p class=\"muted\">Chưa có bình luận được duyệt.</p>");
+                if (_commentResult.Success)
+                {
+                    builder.Append("<div class=\"comment-sent-banner\">");
+                    builder.Append("<span class=\"comment-sent-icon\">✅</span>");
+                    builder.Append("<div><strong>Bình luận đã được gửi thành công!</strong>");
+                    builder.Append("<p>Bình luận của bạn đang <strong>chờ quản trị viên duyệt</strong> và sẽ xuất hiện sau khi được phê duyệt.</p></div>");
+                    builder.Append("</div>");
+                }
+                else
+                {
+                    builder.Append(UiHelper.Alert(_commentResult));
+                }
             }
-            else
+
+            var sessionKey = "PendingComment_" + news.NewsID;
+            var pendingRaw = Session[sessionKey] as string;
+            bool hasPending = false;
+            if (!string.IsNullOrWhiteSpace(pendingRaw))
+            {
+                var parts = pendingRaw.Split(new[] { "|||" }, 3, StringSplitOptions.None);
+                if (parts.Length == 3)
+                {
+                    DateTime pendingTime;
+                    if (DateTime.TryParse(parts[2], out pendingTime) && (DateTime.Now - pendingTime).TotalMinutes < 60)
+                    {
+                        hasPending = true;
+                        builder.Append("<div class=\"comment-pending-preview\">");
+                        builder.Append("<div class=\"comment-pending-header\">");
+                        builder.Append("<span class=\"comment-pending-badge\">⏳ Đang chờ duyệt</span>");
+                        builder.Append("<span class=\"comment-pending-note\">Bình luận này chỉ mình bạn thấy, sẽ hiển thị công khai sau khi được duyệt.</span>");
+                        builder.Append("</div>");
+                        builder.Append("<div class=\"comment-item comment-item-pending\">");
+                        builder.Append("<strong>" + UiHelper.E(parts[0]) + "</strong>");
+                        builder.Append("<span class=\"muted\"> · " + UiHelper.E(UiHelper.Date(pendingTime)) + "</span>");
+                        builder.Append("<p>" + UiHelper.E(parts[1]) + "</p>");
+                        builder.Append("</div>");
+                        builder.Append("</div>");
+                    }
+                    else
+                    {
+                        Session.Remove(sessionKey);
+                    }
+                }
+            }
+
+            if (comments.Count == 0 && !hasPending)
+            {
+                builder.Append("<p class=\"muted\">Chưa có bình luận. Hãy là người đầu tiên bình luận!</p>");
+            }
+            else if (comments.Count > 0)
             {
                 foreach (var comment in comments)
                 {
-                    builder.Append("<div class=\"comment-item\"><strong>" + UiHelper.E(comment.DisplayName) + "</strong><span class=\"muted\"> · " + UiHelper.E(UiHelper.Date(comment.CreatedAt)) + "</span><p>" + UiHelper.E(comment.Content) + "</p></div>");
+                    builder.Append("<div class=\"comment-item\">");
+                    builder.Append("<strong>" + UiHelper.E(comment.DisplayName) + "</strong>");
+                    builder.Append("<span class=\"muted\"> · " + UiHelper.E(UiHelper.Date(comment.CreatedAt)) + "</span>");
+                    builder.Append("<p>" + UiHelper.E(comment.Content) + "</p>");
+                    builder.Append("</div>");
                 }
             }
 
             if (news.AllowComment)
             {
-                builder.Append("<div class=\"form-panel\" style=\"margin-top:18px\"><h3>Gửi bình luận</h3><p class=\"muted\">Bình luận sẽ hiển thị sau khi quản trị viên duyệt.</p><input type=\"hidden\" name=\"commentAction\" value=\"send\" />");
+                bool hasError = _commentResult != null && !_commentResult.Success;
+                var savedContent = hasError ? UiHelper.Attr(Request.Form["content"] ?? string.Empty) : string.Empty;
+                var savedName = hasError ? UiHelper.Attr(Request.Form["guestName"] ?? string.Empty) : string.Empty;
+                var savedEmail = hasError ? UiHelper.Attr(Request.Form["guestEmail"] ?? string.Empty) : string.Empty;
+
+                builder.Append("<div class=\"form-panel\" style=\"margin-top:18px\">");
+                builder.Append("<h3>Gửi bình luận</h3>");
+                builder.Append("<p class=\"comment-form-note\">💬 Bình luận sẽ hiển thị sau khi quản trị viên duyệt. Thường trong vòng 24 giờ.</p>");
+                builder.Append("<input type=\"hidden\" name=\"commentAction\" value=\"send\" />");
+
                 if (!AuthGuard.IsAuthenticated)
                 {
-                    builder.Append("<div class=\"form-grid\"><div class=\"field\"><label>Họ tên</label><input name=\"guestName\" maxlength=\"100\" required /></div><div class=\"field\"><label>Email</label><input name=\"guestEmail\" type=\"email\" maxlength=\"150\" required /></div></div>");
+                    builder.Append("<div class=\"form-grid\">");
+                    builder.Append("<div class=\"field\"><label>Họ tên <span style=\"color:var(--brand)\">*</span></label><input name=\"guestName\" maxlength=\"100\" required value=\"" + savedName + "\" placeholder=\"Tên của bạn...\" /></div>");
+                    builder.Append("<div class=\"field\"><label>Email <span style=\"color:var(--brand)\">*</span></label><input name=\"guestEmail\" type=\"email\" maxlength=\"150\" required value=\"" + savedEmail + "\" placeholder=\"email@example.com\" /></div>");
+                    builder.Append("</div>");
                 }
-                builder.Append("<div class=\"field full\" style=\"margin-top:14px\"><label>Nội dung</label><textarea name=\"content\" maxlength=\"2000\" required></textarea></div><div class=\"btn-row\" style=\"margin-top:14px\"><button class=\"btn-main\" type=\"submit\">Gửi chờ duyệt</button></div></div>");
+                else
+                {
+                    builder.Append("<p class=\"comment-logged-as\">Đăng với tên: <strong>" + UiHelper.E(AuthGuard.CurrentFullName) + "</strong></p>");
+                }
+
+                builder.Append("<div class=\"field full\" style=\"margin-top:14px\">");
+                builder.Append("<label>Nội dung <span style=\"color:var(--brand)\">*</span></label>");
+                builder.Append("<textarea name=\"content\" maxlength=\"2000\" required placeholder=\"Nhập bình luận của bạn...\" oninput=\"updateCmtCount(this)\">" + savedContent + "</textarea>");
+                builder.Append("<span class=\"char-count\" id=\"cmtCharCount\">0 / 2000 ký tự</span>");
+                builder.Append("</div>");
+
+                builder.Append("<div class=\"btn-row\" style=\"margin-top:14px\">");
+                builder.Append("<button class=\"btn-main\" type=\"submit\">✉ Gửi bình luận</button>");
+                builder.Append("</div></div>");
+
+                builder.Append("<script>");
+                builder.Append("function updateCmtCount(ta){var el=document.getElementById('cmtCharCount');if(el){el.textContent=ta.value.length+' / 2000 ký tự';el.style.color=ta.value.length>1800?'var(--danger)':'var(--muted)';}};");
+                builder.Append("(function(){var ta=document.querySelector('textarea[name=\"content\"]');if(ta&&ta.value.length>0)updateCmtCount(ta);})();");
+                builder.Append("</script>");
             }
             else
             {

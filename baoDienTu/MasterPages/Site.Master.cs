@@ -61,6 +61,10 @@ namespace baoDienTu.MasterPages
             builder.Append(UiHelper.E(AuthGuard.CurrentFullName));
             builder.Append("</span>");
 
+            builder.Append("<a href=\"");
+            builder.Append(ResolveUrl("~/User/Profile.aspx"));
+            builder.Append("\">Hồ sơ</a>");
+
             if (AuthGuard.IsAdmin || AuthGuard.IsEditor)
             {
                 builder.Append("<a href=\"");

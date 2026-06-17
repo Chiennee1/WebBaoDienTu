@@ -476,6 +476,114 @@ textarea {
     border-bottom: 1px solid var(--line);
 }
 
+/* ── Banner thành công khi gửi comment ── */
+.comment-sent-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #dcfce7;
+    border: 1px solid #86efac;
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-bottom: 18px;
+}
+
+.comment-sent-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    line-height: 1.2;
+}
+
+.comment-sent-banner strong {
+    display: block;
+    color: #15803d;
+    font-size: 1.02rem;
+    margin-bottom: 4px;
+}
+
+.comment-sent-banner p {
+    margin: 0;
+    color: #166534;
+    font-size: 0.93rem;
+}
+
+/* ── Khối comment "chờ duyệt" ── */
+.comment-pending-preview {
+    border: 1.5px dashed #f59e0b;
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.comment-pending-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: #fef3c7;
+    padding: 8px 14px;
+    border-bottom: 1px solid #fde68a;
+}
+
+.comment-pending-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 3px 10px;
+    background: #f59e0b;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 850;
+    white-space: nowrap;
+}
+
+.comment-pending-note {
+    font-size: 0.84rem;
+    color: #92400e;
+}
+
+.comment-item-pending {
+    background: #fffbeb;
+    padding: 14px;
+    border-bottom: 0;
+    opacity: 0.85;
+}
+
+/* ── Thông tin form ── */
+.comment-form-note {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 0 0 14px;
+    padding: 8px 12px;
+    background: #f0f9ff;
+    border-left: 3px solid #38bdf8;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.comment-logged-as {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0 0 14px;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+}
+
+.comment-logged-as strong {
+    color: var(--ink);
+}
+
+/* ── Đếm ký tự textarea ── */
+.char-count {
+    display: block;
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+
 .tag-row {
     display: flex;
     flex-wrap: wrap;
@@ -614,6 +722,11 @@ textarea {
     color: #991b1b;
 }
 
+.app-alert.warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
 .empty-state {
     background: var(--paper);
     border: 1px dashed #b6bdc9;
@@ -648,11 +761,75 @@ textarea {
     background: #f3f4f6;
 }
 
+.admin-nav-active {
+    background: #fef2f2 !important;
+    color: var(--brand) !important;
+    border-left: 3px solid var(--brand);
+    padding-left: 9px !important;
+    font-weight: 850 !important;
+}
+
+.site-footer h2,
+.site-footer h3 {
+    color: #fff;
+}
+
+.site-footer a {
+    display: block;
+    color: #e5e7eb;
+    margin: 6px 0;
+}
+
+.site-footer span {
+    display: block;
+    color: #cbd5e1;
+    margin-top: 6px;
+}
+
+.footer-logo {
+    color: #fff;
+    margin-bottom: 14px;
+    gap: 14px;
+}
+
+/* Logo footer nhỏ hơn header một chút để cân đối trong nền tối */
+.footer-logo .brand-symbol {
+    width: 52px;
+    height: 52px;
+    box-shadow: 0 6px 18px rgba(122, 23, 18, 0.35);
+    background: linear-gradient(135deg, var(--brand-strong), var(--brand));
+    flex-shrink: 0;
+}
+
+.footer-logo .brand-symbol span {
+    width: 38px;
+    height: 38px;
+    font-size: 0.82rem;
+}
+
+.footer-logo .brand-mark strong {
+    font-size: 1.55rem;
+}
+
+.footer-logo small {
+    color: #94a3b8;
+    font-size: 0.82rem;
+}
+
+.footer-brand p {
+    color: #94a3b8;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-top: 8px;
+    max-width: 360px;
+}
+
 .stat-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
 }
+
 
 .stat-card {
     background: var(--paper);
@@ -757,46 +934,7 @@ textarea {
     gap: 24px;
 }
 
-.footer-brand p {
-    max-width: 520px;
-}
 
-.footer-logo {
-    color: #fff;
-    margin-bottom: 12px;
-}
-
-.footer-logo .brand-symbol {
-    width: 54px;
-    height: 54px;
-    box-shadow: none;
-}
-
-.footer-logo .brand-symbol span {
-    width: 40px;
-    height: 40px;
-}
-
-.footer-logo small {
-    color: #cbd5e1;
-}
-
-.site-footer h2,
-.site-footer h3 {
-    color: #fff;
-}
-
-.site-footer a {
-    display: block;
-    color: #e5e7eb;
-    margin: 6px 0;
-}
-
-.site-footer span {
-    display: block;
-    color: #cbd5e1;
-    margin-top: 6px;
-}
 
 @media (max-width: 900px) {
     .brand-inner,
@@ -881,3 +1019,334 @@ textarea {
         padding: 18px;
     }
 }
+
+/* ================================================================
+   PROFILE & CHANGE-PASSWORD PAGES
+   ================================================================ */
+
+.profile-page-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+}
+
+/* ── Sidebar ── */
+.profile-sidebar {
+    display: grid;
+    gap: 14px;
+}
+
+.profile-avatar-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.profile-avatar-img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--line);
+    margin: 0 auto 12px;
+    display: block;
+}
+
+.profile-avatar-initials {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand-strong), var(--brand));
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 0 auto 12px;
+    display: grid;
+    place-items: center;
+    letter-spacing: 2px;
+}
+
+.profile-avatar-name {
+    font-weight: 800;
+    font-size: 1.08rem;
+    color: var(--ink);
+    margin-bottom: 4px;
+}
+
+.profile-avatar-role {
+    display: inline-flex;
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 0.78rem;
+    font-weight: 850;
+    background: #e0f2fe;
+    color: #0369a1;
+    margin-bottom: 8px;
+}
+
+.profile-avatar-email {
+    color: var(--muted);
+    font-size: 0.9rem;
+    word-break: break-all;
+}
+
+.profile-sidebar-info {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+}
+
+.profile-info-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.92rem;
+}
+
+.profile-info-row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.profile-info-label {
+    color: var(--muted);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.profile-info-val {
+    color: var(--ink);
+    font-weight: 600;
+    text-align: right;
+}
+
+.profile-sidebar-links {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 8px;
+    display: grid;
+    gap: 4px;
+}
+
+.profile-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: calc(var(--radius) - 2px);
+    font-weight: 750;
+    font-size: 0.97rem;
+    color: var(--ink);
+    transition: background 0.15s;
+}
+
+.profile-nav-link:hover {
+    background: #f3f4f6;
+    color: var(--ink);
+}
+
+.profile-nav-active {
+    background: #fee2e2;
+    color: var(--brand);
+}
+
+.profile-nav-active:hover {
+    background: #fecaca;
+    color: var(--brand);
+}
+
+/* ── Main card ── */
+.profile-main {
+    min-width: 0;
+}
+
+.profile-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+}
+
+.profile-card-title {
+    margin: 0 0 6px;
+    font-size: 1.55rem;
+    font-weight: 850;
+}
+
+.profile-card-subtitle {
+    color: var(--muted);
+    margin: 0 0 24px;
+    font-size: 0.97rem;
+}
+
+.req {
+    color: var(--brand);
+}
+
+/* ── Avatar upload zone ── */
+.profile-upload-zone {
+    border: 2px dashed #c5cbd5;
+    border-radius: var(--radius);
+    background: #f8fafc;
+    padding: 22px 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.profile-upload-zone:hover,
+.profile-upload-zone.drag-over {
+    border-color: var(--brand);
+    background: #fff5f5;
+}
+
+.profile-upload-zone.has-file {
+    border-color: var(--accent);
+    background: #f0fdf4;
+}
+
+.profile-upload-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    pointer-events: none;
+}
+
+.profile-upload-inner label,
+.upload-link {
+    pointer-events: auto;
+    color: var(--brand);
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.upload-filename {
+    font-size: 0.88rem;
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+/* ── Password inputs ── */
+.pw-input-wrap {
+    position: relative;
+    display: flex;
+}
+
+.pw-input-wrap input {
+    flex: 1;
+    padding-right: 46px !important;
+}
+
+.pw-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 42px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+}
+
+.pw-toggle:hover {
+    opacity: 1;
+}
+
+/* ── Password strength ── */
+.pw-strength-bar {
+    height: 5px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.pw-strength-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    transition: width 0.3s, background 0.3s;
+}
+
+.pw-strength-label,
+.pw-match-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-top: 4px;
+    min-height: 1.2em;
+}
+
+/* ── Password tips ── */
+.pw-tips {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    color: #0c4a6e;
+    margin-top: 4px;
+}
+
+.pw-tips strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.pw-tips ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.pw-tips li {
+    margin-bottom: 3px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+    .profile-page-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-sidebar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .profile-avatar-card {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 540px) {
+    .profile-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-card {
+        padding: 20px;
+    }
+
+    .profile-card-title {
+        font-size: 1.25rem;
+    }
+}
+
