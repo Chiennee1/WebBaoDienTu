@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Text;
 using System.Web;
 using System.Web.UI;
@@ -26,8 +25,8 @@ namespace baoDienTu.User
         private void HandleSave()
         {
             var fullName = (Request.Form["fullName"] ?? string.Empty).Trim();
-            var phone    = (Request.Form["phone"]    ?? string.Empty).Trim();
-            var avatar   = (Request.Form["avatar"]   ?? string.Empty).Trim();
+            var phone = (Request.Form["phone"] ?? string.Empty).Trim();
+            var avatar = (Request.Form["avatar"] ?? string.Empty).Trim();
 
             if (string.IsNullOrWhiteSpace(fullName))
             {
@@ -35,7 +34,6 @@ namespace baoDienTu.User
                 return;
             }
 
-            // Xử lý upload avatar nếu có file
             var avatarFile = Request.Files["avatarFile"];
             if (avatarFile != null && avatarFile.ContentLength > 0)
             {
@@ -52,7 +50,6 @@ namespace baoDienTu.User
 
             _result = UserBLL.UpdateProfile(AuthGuard.CurrentUserId, fullName, phone, avatar);
 
-            // Cập nhật lại tên trong session
             if (_result != null && _result.Success)
             {
                 HttpContext.Current.Session["CurrentFullName"] = fullName;
@@ -73,100 +70,79 @@ namespace baoDienTu.User
                 : UiHelper.ResolveImageUrl(user.Avatar);
 
             var initials = GetInitials(user.FullName ?? user.Username);
-
             var sb = new StringBuilder();
 
-            sb.Append(@"<div class=""page-shell""><div class=""container-xl""><div class=""profile-page-layout"">");
-
-            // ── Sidebar / avatar card
-            sb.Append(@"<aside class=""profile-sidebar"">");
-            sb.Append(@"<div class=""profile-avatar-card"">");
-
-            if (!string.IsNullOrWhiteSpace(avatarUrl))
-            {
-                sb.Append("<img id=\"profileAvatarImg\" class=\"profile-avatar-img\" src=\"" + UiHelper.Attr(avatarUrl) + "\" alt=\"Ảnh đại diện\" onerror=\"this.style.display='none';document.getElementById('avatarInitials').style.display='grid';\" />");
-                sb.Append("<div id=\"avatarInitials\" class=\"profile-avatar-initials\" style=\"display:none;\">" + UiHelper.E(initials) + "</div>");
-            }
-            else
-            {
-                sb.Append("<img id=\"profileAvatarImg\" class=\"profile-avatar-img\" src=\"\" alt=\"\" style=\"display:none;\" />");
-                sb.Append("<div id=\"avatarInitials\" class=\"profile-avatar-initials\">" + UiHelper.E(initials) + "</div>");
-            }
-
-            sb.Append("<div class=\"profile-avatar-name\">" + UiHelper.E(user.FullName ?? user.Username) + "</div>");
-            sb.Append("<div class=\"profile-avatar-role\">" + UiHelper.E(user.RoleName) + "</div>");
-
-            if (!string.IsNullOrWhiteSpace(user.Email))
-            {
-                sb.Append("<div class=\"profile-avatar-email\">" + UiHelper.E(user.Email) + "</div>");
-            }
-
-            sb.Append("</div>"); // avatar-card
-
-            // Thông tin thêm
-            sb.Append("<div class=\"profile-sidebar-info\">");
-            sb.Append("<div class=\"profile-info-row\"><span class=\"profile-info-label\">Ngày tham gia</span><span class=\"profile-info-val\">" + UiHelper.E(user.CreatedAt.ToString("dd/MM/yyyy")) + "</span></div>");
-            if (user.LastLogin.HasValue)
-            {
-                sb.Append("<div class=\"profile-info-row\"><span class=\"profile-info-label\">Đăng nhập gần nhất</span><span class=\"profile-info-val\">" + UiHelper.E(user.LastLogin.Value.ToString("dd/MM/yyyy HH:mm")) + "</span></div>");
-            }
-            sb.Append("</div>"); // sidebar-info
-
-            sb.Append(@"<div class=""profile-sidebar-links"">");
-            sb.Append("<a class=\"profile-nav-link profile-nav-active\" href=\"Profile.aspx\">🧑 Hồ sơ cá nhân</a>");
-            sb.Append("<a class=\"profile-nav-link\" href=\"ChangePassword.aspx\">🔒 Đổi mật khẩu</a>");
+            sb.Append(@"<div class=""page-shell profile-shell""><div class=""container-xl"">");
+            sb.Append(@"<section class=""profile-hero"" aria-labelledby=""profileHeroTitle"">");
+            sb.Append(@"<div class=""profile-hero-copy"">");
+            sb.Append(@"<span class=""profile-kicker"">Tài khoản độc giả</span>");
+            sb.Append(@"<h1 id=""profileHeroTitle"">Hồ sơ cá nhân</h1>");
+            sb.Append(@"<p>Quản lý thông tin hiển thị, ảnh đại diện và dữ liệu liên hệ của bạn trên Báo Điện Tử.</p>");
             sb.Append("</div>");
+            sb.Append(@"<div class=""profile-hero-actions"">");
+            sb.Append("<a class=\"btn-soft profile-hero-link\" href=\"" + UiHelper.Attr(ResolveUrl("~/Default.aspx")) + "\">Về trang chủ</a>");
+            sb.Append("</div>");
+            sb.Append("</section>");
 
-            sb.Append("</aside>"); // sidebar
+            sb.Append(@"<div class=""profile-page-layout"">");
+            sb.Append(RenderSidebar(user, avatarUrl, initials));
 
-            // ── Nội dung chính (form)
-            sb.Append(@"<div class=""profile-main"">");
-            sb.Append(@"<div class=""profile-card"">");
-            sb.Append("<h1 class=\"profile-card-title\">Cập nhật hồ sơ</h1>");
-            sb.Append("<p class=\"profile-card-subtitle\">Thay đổi thông tin cá nhân của bạn bên dưới.</p>");
+            sb.Append(@"<section class=""profile-main"" aria-labelledby=""profileFormTitle"">");
+            sb.Append(@"<section class=""profile-card profile-form-card"">");
+            sb.Append(@"<div class=""profile-card-head"">");
+            sb.Append(@"<div>");
+            sb.Append(@"<span class=""profile-section-label"">Thông tin</span>");
+            sb.Append(@"<h2 id=""profileFormTitle"" class=""profile-card-title"">Cập nhật hồ sơ</h2>");
+            sb.Append(@"<p class=""profile-card-subtitle"">Thay đổi họ tên, số điện thoại hoặc ảnh đại diện đang dùng cho tài khoản.</p>");
+            sb.Append("</div>");
+            sb.Append("</div>");
 
             sb.Append(UiHelper.Alert(_result));
+            sb.Append(@"<input type=""hidden"" name=""saveProfile"" value=""1"" />");
 
-            sb.Append("<input type=\"hidden\" name=\"saveProfile\" value=\"1\" />");
-
-            // Họ tên
-            sb.Append(@"<div class=""field"" style=""margin-bottom:18px"">");
-            sb.Append("<label for=\"inp_fullName\">Họ và tên <span class=\"req\">*</span></label>");
-            sb.Append("<input id=\"inp_fullName\" name=\"fullName\" value=\"" + UiHelper.Attr(user.FullName) + "\" required placeholder=\"Nhập họ và tên...\" />");
+            sb.Append(@"<div class=""profile-form-grid"">");
+            sb.Append(@"<div class=""field profile-field"">");
+            sb.Append(@"<label for=""inp_fullName"">Họ và tên <span class=""req"">*</span></label>");
+            sb.Append("<input id=\"inp_fullName\" name=\"fullName\" value=\"" + UiHelper.Attr(user.FullName) + "\" required placeholder=\"Nhập họ và tên\" autocomplete=\"name\" />");
+            sb.Append(@"<small class=""field-hint"">Tên này sẽ hiển thị ở thanh chào và khu vực tài khoản.</small>");
             sb.Append("</div>");
 
-            // Số điện thoại
-            sb.Append(@"<div class=""field"" style=""margin-bottom:18px"">");
-            sb.Append("<label for=\"inp_phone\">Số điện thoại</label>");
-            sb.Append("<input id=\"inp_phone\" name=\"phone\" type=\"tel\" value=\"" + UiHelper.Attr(user.Phone) + "\" placeholder=\"Nhập số điện thoại...\" />");
+            sb.Append(@"<div class=""field profile-field"">");
+            sb.Append(@"<label for=""inp_phone"">Số điện thoại</label>");
+            sb.Append("<input id=\"inp_phone\" name=\"phone\" type=\"tel\" value=\"" + UiHelper.Attr(user.Phone) + "\" placeholder=\"Ví dụ: 0901234567\" autocomplete=\"tel\" />");
+            sb.Append(@"<small class=""field-hint"">Chỉ dùng cho thông tin liên hệ nội bộ.</small>");
             sb.Append("</div>");
 
-            // Avatar URL
-            sb.Append(@"<div class=""field"" style=""margin-bottom:18px"">");
-            sb.Append("<label for=\"inp_avatar\">Avatar – URL ảnh (hoặc upload bên dưới)</label>");
+            sb.Append(@"<div class=""field profile-field profile-field-wide"">");
+            sb.Append(@"<label for=""inp_avatar"">URL ảnh đại diện</label>");
             sb.Append("<input id=\"inp_avatar\" name=\"avatar\" value=\"" + UiHelper.Attr(user.Avatar) + "\" placeholder=\"https://...\" oninput=\"previewAvatarUrl(this.value)\" />");
+            sb.Append(@"<small class=""field-hint"">Bạn có thể nhập đường dẫn ảnh hoặc tải ảnh mới ở bên dưới.</small>");
             sb.Append("</div>");
 
-            // Upload file
-            sb.Append(@"<div class=""profile-upload-zone"" id=""uploadZone"">");
+            sb.Append(@"<div class=""profile-field-wide"">");
+            sb.Append(@"<div class=""profile-upload-zone"" id=""uploadZone"" role=""button"" tabindex=""0"" aria-describedby=""uploadHint"">");
             sb.Append(@"<div class=""profile-upload-inner"">");
-            sb.Append("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"28\" height=\"28\" fill=\"none\" viewBox=\"0 0 24 24\"><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.8\" d=\"M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 12V4m0 0-3 3m3-3 3 3\"/></svg>");
-            sb.Append("<p>Kéo thả hoặc <label for=\"inp_avatarFile\" class=\"upload-link\">chọn ảnh</label> (JPG, PNG, WEBP, tối đa 3 MB)</p>");
-            sb.Append("<input id=\"inp_avatarFile\" name=\"avatarFile\" type=\"file\" accept=\"image/jpeg,image/png,image/gif,image/webp\" style=\"display:none;\" onchange=\"handleFileChange(this)\" />");
-            sb.Append("<span id=\"uploadFileName\" class=\"upload-filename\"></span>");
+            sb.Append(@"<span class=""profile-upload-icon"" aria-hidden=""true"">" + IconUpload() + "</span>");
+            sb.Append(@"<span class=""profile-upload-title"">Kéo thả ảnh vào đây</span>");
+            sb.Append(@"<span id=""uploadHint"" class=""profile-upload-note"">JPG, PNG, GIF hoặc WEBP, tối đa 3 MB.</span>");
+            sb.Append(@"<label for=""inp_avatarFile"" class=""upload-link"">Chọn ảnh từ máy</label>");
+            sb.Append(@"<input id=""inp_avatarFile"" name=""avatarFile"" type=""file"" accept=""image/jpeg,image/png,image/gif,image/webp"" onchange=""handleFileChange(this)"" />");
+            sb.Append(@"<span id=""uploadFileName"" class=""upload-filename"" aria-live=""polite""></span>");
             sb.Append("</div>");
-            sb.Append("</div>"); // upload-zone
-
-            sb.Append(@"<div class=""btn-row"" style=""margin-top:24px"">");
-            sb.Append("<button class=\"btn-main\" type=\"submit\" id=\"btnSaveProfile\">💾 Lưu hồ sơ</button>");
+            sb.Append("</div>");
+            sb.Append("</div>");
             sb.Append("</div>");
 
-            sb.Append("</div>"); // profile-card
-            sb.Append("</div>"); // profile-main
-            sb.Append("</div>"); // layout
-            sb.Append("</div></div>"); // page-shell + container
+            sb.Append(@"<div class=""profile-actions"">");
+            sb.Append(@"<button class=""btn-main profile-primary"" type=""submit"" id=""btnSaveProfile"">" + IconSave() + "<span>Lưu hồ sơ</span></button>");
+            sb.Append(@"<a class=""btn-soft"" href=""ChangePassword.aspx"">Đổi mật khẩu</a>");
+            sb.Append("</div>");
 
-            // Script cho preview avatar và upload zone
+            sb.Append("</section>");
+            sb.Append("</section>");
+            sb.Append("</div>");
+            sb.Append("</div></div>");
+
             sb.Append(@"<script>
 function previewAvatarUrl(url) {
     var img = document.getElementById('profileAvatarImg');
@@ -176,7 +152,7 @@ function previewAvatarUrl(url) {
         img.src = url.trim();
         img.style.display = '';
         init.style.display = 'none';
-        img.onerror = function() { img.style.display='none'; init.style.display='grid'; };
+        img.onerror = function() { img.style.display = 'none'; init.style.display = 'grid'; };
     } else {
         img.style.display = 'none';
         init.style.display = 'grid';
@@ -185,14 +161,14 @@ function previewAvatarUrl(url) {
 
 function handleFileChange(input) {
     var label = document.getElementById('uploadFileName');
-    var zone  = document.getElementById('uploadZone');
+    var zone = document.getElementById('uploadZone');
     if (input.files && input.files[0]) {
         var file = input.files[0];
         label.textContent = file.name;
         zone.classList.add('has-file');
         var reader = new FileReader();
         reader.onload = function(e) {
-            var img  = document.getElementById('profileAvatarImg');
+            var img = document.getElementById('profileAvatarImg');
             var init = document.getElementById('avatarInitials');
             if (!img || !init) return;
             img.src = e.target.result;
@@ -207,7 +183,6 @@ function handleFileChange(input) {
     }
 }
 
-// Drag-and-drop cho upload zone
 (function() {
     var zone = document.getElementById('uploadZone');
     if (!zone) return;
@@ -227,9 +202,60 @@ function handleFileChange(input) {
             document.getElementById('inp_avatarFile').click();
         }
     });
+    zone.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            document.getElementById('inp_avatarFile').click();
+        }
+    });
 })();
 </script>");
 
+            return sb.ToString();
+        }
+
+        private static string RenderSidebar(UserModel user, string avatarUrl, string initials)
+        {
+            var sb = new StringBuilder();
+            sb.Append(@"<aside class=""profile-sidebar"" aria-label=""Tài khoản"">");
+            sb.Append(@"<section class=""profile-account-card"">");
+            sb.Append(@"<div class=""profile-avatar-frame"">");
+
+            if (!string.IsNullOrWhiteSpace(avatarUrl))
+            {
+                sb.Append("<img id=\"profileAvatarImg\" class=\"profile-avatar-img\" src=\"" + UiHelper.Attr(avatarUrl) + "\" alt=\"Ảnh đại diện\" onerror=\"this.style.display='none';document.getElementById('avatarInitials').style.display='grid';\" />");
+                sb.Append("<div id=\"avatarInitials\" class=\"profile-avatar-initials\" style=\"display:none;\">" + UiHelper.E(initials) + "</div>");
+            }
+            else
+            {
+                sb.Append("<img id=\"profileAvatarImg\" class=\"profile-avatar-img\" src=\"\" alt=\"\" style=\"display:none;\" />");
+                sb.Append("<div id=\"avatarInitials\" class=\"profile-avatar-initials\">" + UiHelper.E(initials) + "</div>");
+            }
+
+            sb.Append("</div>");
+            sb.Append(@"<div class=""profile-person"">");
+            sb.Append("<h2 class=\"profile-avatar-name\">" + UiHelper.E(user.FullName ?? user.Username) + "</h2>");
+            sb.Append("<span class=\"profile-avatar-role\">" + UiHelper.E(user.RoleName) + "</span>");
+
+            if (!string.IsNullOrWhiteSpace(user.Email))
+            {
+                sb.Append("<span class=\"profile-avatar-email\">" + UiHelper.E(user.Email) + "</span>");
+            }
+
+            sb.Append("</div>");
+            sb.Append("</section>");
+
+            sb.Append(@"<section class=""profile-sidebar-info"" aria-label=""Thông tin tài khoản"">");
+            sb.Append("<div class=\"profile-info-row\"><span class=\"profile-info-label\">Tên đăng nhập</span><span class=\"profile-info-val\">" + UiHelper.E(user.Username) + "</span></div>");
+            sb.Append("<div class=\"profile-info-row\"><span class=\"profile-info-label\">Ngày tham gia</span><span class=\"profile-info-val\">" + UiHelper.E(user.CreatedAt.ToString("dd/MM/yyyy")) + "</span></div>");
+            sb.Append("<div class=\"profile-info-row\"><span class=\"profile-info-label\">Đăng nhập gần nhất</span><span class=\"profile-info-val\">" + UiHelper.E(user.LastLogin.HasValue ? user.LastLogin.Value.ToString("dd/MM/yyyy HH:mm") : "Chưa ghi nhận") + "</span></div>");
+            sb.Append("</section>");
+
+            sb.Append(@"<nav class=""profile-sidebar-links"" aria-label=""Thiết lập tài khoản"">");
+            sb.Append(@"<a class=""profile-nav-link profile-nav-active"" href=""Profile.aspx"">" + IconUser() + "<span>Hồ sơ cá nhân</span></a>");
+            sb.Append(@"<a class=""profile-nav-link"" href=""ChangePassword.aspx"">" + IconLock() + "<span>Đổi mật khẩu</span></a>");
+            sb.Append("</nav>");
+            sb.Append("</aside>");
             return sb.ToString();
         }
 
@@ -239,6 +265,31 @@ function handleFileChange(input) {
             var parts = name.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length == 1) return parts[0].Substring(0, Math.Min(2, parts[0].Length)).ToUpper();
             return (parts[0][0].ToString() + parts[parts.Length - 1][0].ToString()).ToUpper();
+        }
+
+        private static string IconUser()
+        {
+            return Svg(@"<path d=""M20 21a8 8 0 0 0-16 0"" /><path d=""M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"" />");
+        }
+
+        private static string IconLock()
+        {
+            return Svg(@"<rect x=""5"" y=""11"" width=""14"" height=""10"" rx=""2"" /><path d=""M8 11V8a4 4 0 0 1 8 0v3"" />");
+        }
+
+        private static string IconSave()
+        {
+            return Svg(@"<path d=""M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"" /><path d=""M17 21v-8H7v8"" /><path d=""M7 3v5h8"" />");
+        }
+
+        private static string IconUpload()
+        {
+            return Svg(@"<path d=""M12 16V4"" /><path d=""m7 9 5-5 5 5"" /><path d=""M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"" />");
+        }
+
+        private static string Svg(string body)
+        {
+            return @"<svg class=""ui-icon"" xmlns=""http://www.w3.org/2000/svg"" width=""20"" height=""20"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""1.9"" stroke-linecap=""round"" stroke-linejoin=""round"" aria-hidden=""true"">" + body + "</svg>";
         }
     }
 }
